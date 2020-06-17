@@ -1,0 +1,127 @@
+***********************************
+please ignore this file
+***********************************
+
+
+pixelColumn.setWallIsDark(ray.getHitX());
+
+
+private Rectangle wall;
+	private Rectangle floor;
+	private Rectangle ceiling;
+	private BufferedImage texture;
+	private boolean isTextured;
+	private boolean wallIsDark;
+	
+	public PixelColumn() {}
+	
+	public PixelColumn(Point2D.Double topLeft, int width, int height) {
+		super(topLeft, new Point2D.Double(topLeft.x + width, topLeft.y + height), Color.WHITE);
+		setup();
+	}
+	
+	public PixelColumn(Point2D.Double topLeft, int width, int height, BufferedImage texture) {
+		super(topLeft, new Point2D.Double(topLeft.x + width, topLeft.y + height), Color.WHITE);
+		this.texture = texture;
+		this.isTextured = true;
+		setup();
+	}
+	
+	public Color getWallColor() {
+		return wall.getFillColor();
+	}
+
+	public void setColumn(double wallHeight) {
+		double floorHeight = calculFloorHeight(wallHeight);
+		Point2D.Double wallTopLeft = calculWallTopLeft(floorHeight);
+		Point2D.Double wallBottomRight = calculWallBottomRight(wallTopLeft, wallHeight);
+		setWall(topLeft, wallBottomRight);
+		setFloor(wallBottomRight);
+		setCeiling(wallTopLeft);
+	}
+	
+	public void setWallHeight(int height) {}
+	
+	public void setColors(Color floorColor, Color wallColor, Color ceilingColor) {
+		floor.setColors(floorColor);
+		ceiling.setColors(ceilingColor);
+		wall.setColors(wallColor);
+	}
+	
+	public void setWallIsDark(boolean wallIsDark) {
+		this.wallIsDark = wallIsDark;
+	}
+	
+	public void paint(Graphics g) {
+		floor.fill(g);
+		ceiling.fill(g);
+		if(isTextured) {
+			if(wallIsDark) {
+				drawDarkTexturedWall(g);
+			} else {
+				drawTexturedWall(g);
+			}
+		} else {
+			if(wallIsDark) {
+				wall.setColors(wall.getFillColor().darker());
+			} 
+			wall.fill(g);
+			
+		}
+	}
+	
+	private void setup() {
+		wall = new Rectangle();
+		floor = new Rectangle();
+		ceiling = new Rectangle();
+	}
+	
+	private double calculFloorHeight(double wallHeight) {
+		return (this.bottomRight.y - wallHeight)/2;
+	}
+	
+	private Point2D.Double calculWallTopLeft(double floorHeight) {
+		return new Point2D.Double(this.topLeft.x, this.topLeft.y + floorHeight);
+	}
+	
+	private Point2D.Double calculWallBottomRight(Point2D.Double wallTopLeft, double wallHeight) {
+		return new Point2D.Double(this.bottomRight.x, wallTopLeft.y + wallHeight);
+	}
+
+	private void setWall(Point2D.Double topLeft, Point2D.Double bottomRight) {
+		wall.setTopLeft(topLeft);
+		wall.setBottomRight(bottomRight);
+	}
+	
+	private void setFloor(Point2D.Double wallBottomRight) {
+		floor.setTopLeft(new Point2D.Double(this.topLeft.x, wallBottomRight.y));
+		floor.setBottomRight(this.bottomRight);
+	}
+	
+	private void setCeiling(Point2D.Double wallTopLeft) {
+		ceiling.setTopLeft(this.topLeft);
+		ceiling.setBottomRight(new Point2D.Double(this.bottomRight.x, wallTopLeft.y));
+	}
+	
+	private void drawTexturedWall(Graphics g) {
+		drawTexturedWall(g, texture);
+	}
+	
+	private void drawDarkTexturedWall(Graphics g) {
+		RescaleOp darkFilter = 	new RescaleOp(new float[]{0.8f, 0.8f, 0.8f, 1f}, // scale factors for red, green, blue, alpha
+		        				new float[]{0, 0, 0, 0}, // offsets for red, green, blue, alpha
+		        				null);
+		BufferedImage darkTexture = darkFilter.filter(texture, null);
+		drawTexturedWall(g,  darkTexture);
+	}
+	
+	private void drawTexturedWall(Graphics g, BufferedImage texture) {
+		int topLeftX = MathTools.doubleToInt(wall.getTopLeft().x);
+		int topLeftY = MathTools.doubleToInt(wall.getTopLeft().y);
+		int bottomRightX = MathTools.doubleToInt(wall.getBottomRight().x);
+		int bottomRightY = MathTools.doubleToInt(wall.getBottomRight().y);
+
+		g.drawImage(texture, topLeftX, topLeftY, bottomRightX, bottomRightY, null);
+	}
+
+}
