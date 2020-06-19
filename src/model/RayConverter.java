@@ -117,7 +117,7 @@ public class RayConverter {
 		Color floorColor = mapColors[0];
 		Color ceilingColor = mapColors[1];
 		PixelColumn pixelColumn = new PixelColumn();
-		for(int i = 0; i < rays.length; ++i) {
+		for(int i = 0; i < pixelColumns.length; ++i) {
 			pixelColumn = pixelColumns[i];
 			pixelColumn.setIsTextured(true);
 			pixelColumn.setColors(floorColor, wallColor, ceilingColor);

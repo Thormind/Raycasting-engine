@@ -41,8 +41,8 @@ public class Canvas3D extends JPanel{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g); // important
 		// anti-aliasing
-		Graphics2D g2=(Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+//		Graphics2D g2=(Graphics2D)g;
+//		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		setBackground(BKGND_COLOR);
 		setSize(dimension);
 		setLocation(position);

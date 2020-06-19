@@ -1,0 +1,8 @@
+**** Please ignore this, meant for future reference ****
+
+Jprofiler:
+
+Go to the call tree view, record CPU data and set the thread status selector to "Blocking", 
+than you see in which call stacks the blocking occurs.
+
+Detailed analysis of blocking situations is available in the "Monitors & Locks" view section.
